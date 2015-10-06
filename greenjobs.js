@@ -4,15 +4,19 @@
  */
 
 /* globals _, greenjobs */
-/* exported testdata, listIndustries, countyGreenJobs, jobswithKeyword */
-
-/**
- * Provides a small set of records from the Hawaii Directory of Green Employers.
- * @type {Array.<T>}
- */
-var testdata = greenjobs.splice(0, 10);
+/* exported testdata, listIndustries, countyGreenJobs, jobswithKeyword, noString */
 
 // listIndustries(data). This function can be passed greenjobs and returns an array of strings indicating all the industries in the dataset (no duplicates).
+
+function hasIndustry(record) {
+  return record.hasOwnProperty("Industry");
+}
+
+function noString(record) {
+  if (_.isEmpty(record["Industy"])) {
+    throw new Error("No string Industry.");
+  }
+}
 
 /**
  * Finds all the industries in the data set with no duplicates.
@@ -20,6 +24,10 @@ var testdata = greenjobs.splice(0, 10);
  * @returns An array of strings indicating all the industries in the data set with no duplicates.
  */
 function listIndustries(data) {
+  if (!_.every(data, hasIndustry)) {
+    throw new Error("No Industry field.");
+  }
+
   return _.uniq(_.pluck(data, "Industry"));
 }
 
